@@ -5,7 +5,8 @@ import stores_cleaner as sc
 stores = sc.clean_stores(create_excel=False)
 
 print('Leyendo Iniciativas')
-df1 = pd.read_csv('lecturas_iniciativa_006139(2).csv', encoding='mbcs', index_col=4)
+df1 = pd.read_excel('iniciativas.xlsx', index_col=4, sheetname=0)
+# df1 = pd.read_csv('lecturas_iniciativa_006139(2).csv', encoding='mbcs', index_col=4)
 print('Iniciativas cargadas en memoria')
 
 print('Eliminando Duplicados')
@@ -24,15 +25,19 @@ df3 = df1.join(stores.set_index('Stores ID'), rsuffix='_stores')
 
 print('Filtrando ultimos registros')
 
-df3['Max Date'] = df3.groupby(['Nombre Tienda', 'Apoyo'])['Fecha Captura'].transform('max')
+sort = df3.sort_values(by='Fecha Captura')
 
-new = pd.DataFrame(df3.groupby(['Canal', 'Cadena', 'Región', 'Fecha Captura',
-                                'Nombre Tienda', 'Apoyo', 'Respuesta Opc.Multiple/Texto Abierto'])['Max Date'].max())
+df3 = sort.drop_duplicates(['Nombre Tienda', 'Apoyo'], keep='last').values
+
+final = pd.DataFrame(df3, columns=sort.columns)
 
 print('Generando prueba1.xlsx')
 writter = pd.ExcelWriter('prueba1.xlsx')
 
 print('Guardando prueba1.xlsx')
-new.to_excel(writter, 'df3')
+
+final.to_excel(writter, 'final')
+
+sort.to_excel(writter, 'df3')
 
 writter.save()
