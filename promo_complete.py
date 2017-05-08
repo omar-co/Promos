@@ -1,11 +1,11 @@
 import pandas as pd
 import stores_cleaner as sc
 
-
-stores = sc.clean_stores(create_excel=False)
+# stores = sc.clean_stores(create_excel=False)
 
 print('Leyendo Iniciativas')
 df1 = pd.read_excel('iniciativas.xlsx', index_col=4, sheetname=0)
+
 # df1 = pd.read_csv('lecturas_iniciativa_006139(2).csv', encoding='mbcs', index_col=4)
 print('Iniciativas cargadas en memoria')
 
@@ -21,7 +21,9 @@ df1 = df1[['Cadena', 'Formato', 'Región', 'Zona', 'Nombre Tienda', 'Fecha Captu
 # stores = stores.drop_duplicates()
 
 print('Ligando Catálogo de Tiendas con Iniciativas')
-df3 = df1.join(stores.set_index('Stores ID'), rsuffix='_stores')
+# df3 = df1.join(stores.set_index('Stores ID'), rsuffix='_stores')
+
+df3 = df1
 
 print('Filtrando ultimos registros')
 

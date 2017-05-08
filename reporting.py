@@ -8,7 +8,8 @@ def obtener_categoria(categoria):
     return order[order['Categoría'] == categoria]
 
 
-data = pd.read_excel('Reporte de Promociones.xlsx', 15)
+# data = pd.read_excel('Reporte de Promociones.xlsx', 15)
+data = pd.read_excel('pruebafiltro.xlsx', 0)
 
 data = data[['Canal', 'Categoría', 'Cadena', 'Región', 'Zona', 'Tienda ID', 'Nombre Tienda', 'Fecha Captura',
              'Iniciativa', 'Apoyo', 'Respuesta Opc.Multiple/Texto Abierto']]
@@ -75,15 +76,10 @@ writter = pd.ExcelWriter('RepPromos.xlsx')
 
 reporte_mot.to_excel(writter, 'Resumen MOT')
 
-categorias[categorias['Categoría'] == 'APDOs'].to_excel(writter, 'APDOs')
-categorias[categorias['Categoría'] == 'B&R'].to_excel(writter, 'B&R')
-categorias[categorias['Categoría'] == 'Cuidado Bucal'].to_excel(writter, 'Cuidado Bucal')
-categorias[categorias['Categoría'] == 'Cuidado Femenino'].to_excel(writter, 'Cuidado Femenino')
-categorias[categorias['Categoría'] == 'Cuidado del Cabello'].to_excel(writter, 'Cuidado del Cabello')
-categorias[categorias['Categoría'] == 'Detergentes'].to_excel(writter, 'Detergentes')
-categorias[categorias['Categoría'] == 'Lavatrastes'].to_excel(writter, 'Lavatrastes')
-categorias[categorias['Categoría'] == 'PHC'].to_excel(writter, 'PHC')
-categorias[categorias['Categoría'] == 'Suavizantes'].to_excel(writter, 'Suavizantes')
+categorias_values = categorias.Categoría.unique()
+
+for cat in categorias_values:
+    categorias[categorias['Categoría'] == cat].to_excel(writter, cat)
 
 order[order['Cadena'] == 'AC Soriana'].pivot_table(index=['Canal', 'Categoría', 'Cadena', 'Apoyo'],
                                                    columns='Respuesta Opc.Multiple/Texto Abierto', values='Zona',

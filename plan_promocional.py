@@ -2,25 +2,44 @@ import pandas as pd
 
 
 def leer_plan(file):
-    data = pd.read_excel(file, 4, 2)
+    data = pd.read_excel(file, 0, 2)
     return data
 
 
-# file = input('Ingrese el file con el Plan Promocional de Belleza.')
+# file_belleza = input('Ingrese el nombre del file con el Plan Promocional de Belleza.')
+# file_farmacia = input('Ingrese el nombre del file con el Plan Promocional de Farmacia.')
+# file_quimicos = input('Ingrese el nombre del file con el Plan Promocional de Quimicos.')
+#
 
-# TODO crear vaiable farmacia
-# TODO crear vaiable quimicos
+# belleza = pd.read_excel(file_belleza, 0, 2)
+# farmacia = pd.read_excel(file_farmacia, 0, 2)
+# quimicos = pd.read_excel(file_quimicos, 0, 2)
 
-belleza = leer_plan('Plan Promocional Belleza Mayo 2017.xlsx')
+belleza = pd.read_excel('Plan Promocional Belleza Mayo 2017.xlsx', 4, 2)
+farmacia = pd.read_excel('Plan Promocional Farmacia Mayo 2017.xlsx', 0, 2)
+quimicos = pd.read_excel('Plan Promocional Quimicos Mayo 2017.xlsx', 4, 2)
 
-# TODO  leer Farmacia
-# TODO  leer Quimicos
+frames = [belleza, farmacia, quimicos]
 
-# TODO unir farmacias quimicos y belleza = preguntas
+preguntas = pd.concat(frames)
 
-# TODO limpiar columnas preguntas
+preguntas = preguntas[['Categoría', 'NOMBRE DE LA INICIATIVA']]
 
-iniciativas = pd.read_excel('iniciativas.xlsx', 0)
+# iniciativas = pd.read_excel('iniciativas.xlsx', 0)
+
+iniciativa_belleza_file = input('Ingrese el nombre del file con la lectura de Belleza.')
+iniciativa_farmacia_file = input('Ingrese el nombre del file con la lectura de Farmacia.')
+iniciativa_quimicos_file = input('Ingrese el nombre del file con la lectura de Quimicos.')
+
+# iniciativa_belleza = pd.read_csv(iniciativa_belleza_file, encoding='mbcs')
+# iniciativa_farmacia = pd.read_csv(iniciativa_farmacia_file, encoding='mbcs')
+# iniciativa_quimicos = pd.read_csv(iniciativa_quimicos_file, encoding='mbcs')
+
+iniciativa_belleza = pd.read_csv('lecturas_belleza.csv', encoding='mbcs')
+iniciativa_farmacia = pd.read_csv('lecturas_farmacia.csv', encoding='mbcs')
+iniciativa_quimicos = pd.read_csv('lecturas_quimicos.csv', encoding='mbcs')
+
+iniciativas = pd.concat([iniciativa_belleza, iniciativa_farmacia, iniciativa_quimicos])
 
 iniciativas = iniciativas[
     ['Cadena', 'Región', 'Zona', 'Tienda ID', 'Nombre Tienda', 'Fecha Captura', 'Grupo Categorias',
@@ -30,8 +49,8 @@ preguntas_id = iniciativas['Apoyo'].str.extract("(?P<PreguntaID>\w{5}\d{1,3})(?P
 
 iniciativas = iniciativas.join(preguntas_id)
 
-# TODO cambiar belleza por preguntas
-belleza.set_index('NOMBRE DE LA INICIATIVA')
+preguntas = preguntas.set_index('NOMBRE DE LA INICIATIVA')
 
-# TODO cambiar belleza por preguntas
-iniciativas = iniciativas.join(belleza, on='Pregunta', rsuffix='_preg')
+iniciativas = iniciativas.join(preguntas, on='Pregunta', rsuffix='_preg')
+
+iniciativas.to_excel('prueba1.xlsx', 'demo')
