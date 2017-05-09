@@ -9,7 +9,7 @@ def obtener_categoria(categoria):
 
 
 # data = pd.read_excel('Reporte de Promociones.xlsx', 15)
-data = pd.read_excel('pruebafiltro.xlsx', 0)
+data = pd.read_excel('iniciativas.xlsx', 0)
 
 data = data[['Canal', 'Categoría', 'Cadena', 'Región', 'Zona', 'Tienda ID', 'Nombre Tienda', 'Fecha Captura',
              'Iniciativa', 'Apoyo', 'Respuesta Opc.Multiple/Texto Abierto']]
@@ -104,8 +104,6 @@ order[(order['Cadena'] == 'AB Bodega Aurrera') | (order['Cadena'] == 'AA Superce
     columns='Respuesta Opc.Multiple/Texto Abierto', values='Zona',
     fill_value=0).reset_index().to_excel(writter, 'WM',
                                          index=False)
-
-# reporte_mot.ix['Detergentes', 'Superama'].to_frame().to_excel(writter, 'Superama')
 
 writter.save()
 
